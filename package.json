@@ -7,7 +7,7 @@
   ],
   "version": "1.0.1",
   "author": "Domenic Denicola <d@domenic.me> (https://domenic.me/)",
-  "license": "WTFPL",
+  "license": "MIT",
   "repository": "jsdom/html-encoding-sniffer",
   "main": "lib/html-encoding-sniffer.js",
   "files": [
