@@ -177,6 +177,34 @@ describe("A file with no BOM and a <meta http-equiv> with no quotes", () => {
   });
 });
 
+describe("A file with no BOM and a ><meta charset>", () => {
+  const buffer = read("no-bom-charset-bracket.html");
+
+  it("should sniff as the charset value, given no options", () => {
+    const sniffedEncoding = htmlEncodingSniffer(buffer);
+
+    assert.strictEqual(sniffedEncoding, "UTF-8");
+  });
+
+  it("should sniff as the transport layer encoding, given that", () => {
+    const sniffedEncoding = htmlEncodingSniffer(buffer, {
+      transportLayerEncodingLabel: "windows-1251",
+      defaultEncoding: "ISO-8859-16"
+    });
+
+    assert.strictEqual(sniffedEncoding, "windows-1251");
+  });
+
+
+  it("should sniff as the charset value, given only a default encoding", () => {
+    const sniffedEncoding = htmlEncodingSniffer(buffer, {
+      defaultEncoding: "ISO-8859-16"
+    });
+
+    assert.strictEqual(sniffedEncoding, "UTF-8");
+  });
+});
+
 for (const utf16Encoding of ["utf-16be", "utf-16", "utf-16le"]) {
   describe(`A file with a BOM and a <meta charset> of ${utf16Encoding}`, () => {
     const buffer = read(`no-bom-charset-${utf16Encoding}.html`);
