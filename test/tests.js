@@ -5,7 +5,9 @@ const path = require("path");
 const htmlEncodingSniffer = require("..");
 
 function read(relative) {
-  return fs.readFileSync(path.resolve(__dirname, relative));
+  // Test that the module works with Uint8Arrays, not just Buffers:
+  const buffer = fs.readFileSync(path.resolve(__dirname, relative));
+  return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
 }
 
 describe("A file with a UTF-8 BOM", () => {
