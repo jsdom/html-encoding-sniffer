@@ -18,7 +18,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "whatwg-encoding": "^3.0.0"
+    "whatwg-encoding": "^3.1.1"
   },
   "devDependencies": {
     "@domenic/eslint-config": "^3.0.0",
