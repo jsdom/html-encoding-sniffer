@@ -1,7 +1,8 @@
 "use strict";
-const assert = require("assert");
-const fs = require("fs");
-const path = require("path");
+const { describe, it } = require("node:test");
+const assert = require("node:assert");
+const fs = require("node:fs");
+const path = require("node:path");
 const htmlEncodingSniffer = require("..");
 
 function read(relative) {
