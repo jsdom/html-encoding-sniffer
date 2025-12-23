@@ -8,7 +8,10 @@
   "version": "4.0.0",
   "author": "Domenic Denicola <d@domenic.me> (https://domenic.me/)",
   "license": "MIT",
-  "repository": "jsdom/html-encoding-sniffer",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jsdom/html-encoding-sniffer.git"
+  },
   "main": "lib/html-encoding-sniffer.js",
   "files": [
     "lib/"
