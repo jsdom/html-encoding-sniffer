@@ -12,11 +12,11 @@ const sniffedEncoding = htmlEncodingSniffer(htmlBytes);
 
 The passed bytes are given as a `Uint8Array`; the Node.js `Buffer` subclass of `Uint8Array` will also work, as shown above.
 
-The returned value will be a canonical [encoding name](https://encoding.spec.whatwg.org/#names-and-labels) (not a label). You might then combine this with the [whatwg-encoding](https://github.com/jsdom/whatwg-encoding) package to decode the result:
+The returned value will be an [encoding label](https://encoding.spec.whatwg.org/#names-and-labels), and in particular, the label which is a lowercased version of the encoding's name. You might then combine this with the [`@exodus/bytes`](https://github.com/ExodusOSS/bytes/) package to decode the result:
 
 ```js
-const whatwgEncoding = require("whatwg-encoding");
-const htmlString = whatwgEncoding.decode(htmlBytes, sniffedEncoding);
+const { TextDecoder } = require("@exodus/bytes");
+const htmlString = (new TextEncoder(sniffedEncoding)).decode(htmlBytes);
 ```
 
 ## Options
