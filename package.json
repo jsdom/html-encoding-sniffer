@@ -21,7 +21,7 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@exodus/bytes": "^1.2.0"
+    "@exodus/bytes": "^1.6.0"
   },
   "devDependencies": {
     "@domenic/eslint-config": "^4.0.1",
