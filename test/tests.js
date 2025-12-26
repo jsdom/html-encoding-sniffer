@@ -25,7 +25,7 @@ for (const file of fs.readdirSync(path.resolve(__dirname, "fixtures/bom"))) {
     it(`should sniff as ${desiredEncoding}, given overriding options`, () => {
       const sniffedEncoding = htmlEncodingSniffer(buffer, {
         transportLayerEncodingLabel: "windows-1252",
-        defaultEncoding: "utf-16le"
+        defaultEncoding: "UTF-16LE"
       });
 
       assert.strictEqual(sniffedEncoding, desiredEncoding);
@@ -47,7 +47,7 @@ for (const file of fs.readdirSync(path.resolve(__dirname, "fixtures/normal"))) {
     it("should sniff as the transport layer encoding, given that", () => {
       const sniffedEncoding = htmlEncodingSniffer(buffer, {
         transportLayerEncodingLabel: "windows-1251",
-        defaultEncoding: "iso-8859-16"
+        defaultEncoding: "ISO-8859-16"
       });
 
       assert.strictEqual(sniffedEncoding, "windows-1251");
@@ -56,7 +56,7 @@ for (const file of fs.readdirSync(path.resolve(__dirname, "fixtures/normal"))) {
 
     it(`should sniff as ${desiredEncoding}, given only a default encoding`, () => {
       const sniffedEncoding = htmlEncodingSniffer(buffer, {
-        defaultEncoding: "iso-8859-16"
+        defaultEncoding: "ISO-8859-16"
       });
 
       assert.strictEqual(sniffedEncoding, desiredEncoding);
@@ -78,7 +78,7 @@ for (const file of fs.readdirSync(path.resolve(__dirname, "fixtures/no-result"))
     it("should sniff as the transport layer encoding, given that", () => {
       const sniffedEncoding = htmlEncodingSniffer(buffer, {
         transportLayerEncodingLabel: "windows-1251",
-        defaultEncoding: "iso-8859-16"
+        defaultEncoding: "ISO-8859-16"
       });
 
       assert.strictEqual(sniffedEncoding, "windows-1251");
@@ -87,10 +87,10 @@ for (const file of fs.readdirSync(path.resolve(__dirname, "fixtures/no-result"))
 
     it("should sniff as the default encoding, given that", () => {
       const sniffedEncoding = htmlEncodingSniffer(buffer, {
-        defaultEncoding: "iso-8859-16"
+        defaultEncoding: "ISO-8859-16"
       });
 
-      assert.strictEqual(sniffedEncoding, "iso-8859-16");
+      assert.strictEqual(sniffedEncoding, "ISO-8859-16");
     });
   });
 }
@@ -102,13 +102,13 @@ for (const file of fs.readdirSync(path.resolve(__dirname, "fixtures/utf"))) {
     it("should sniff as UTF-8, given no options", () => {
       const sniffedEncoding = htmlEncodingSniffer(buffer);
 
-      assert.strictEqual(sniffedEncoding, "utf-8");
+      assert.strictEqual(sniffedEncoding, "UTF-8");
     });
 
     it("should sniff as the transport layer encoding, given that", () => {
       const sniffedEncoding = htmlEncodingSniffer(buffer, {
         transportLayerEncodingLabel: "windows-1251",
-        defaultEncoding: "iso-8859-16"
+        defaultEncoding: "ISO-8859-16"
       });
 
       assert.strictEqual(sniffedEncoding, "windows-1251");
@@ -117,10 +117,10 @@ for (const file of fs.readdirSync(path.resolve(__dirname, "fixtures/utf"))) {
 
     it("should sniff as UTF-8, given only a default encoding", () => {
       const sniffedEncoding = htmlEncodingSniffer(buffer, {
-        defaultEncoding: "iso-8859-16"
+        defaultEncoding: "ISO-8859-16"
       });
 
-      assert.strictEqual(sniffedEncoding, "utf-8");
+      assert.strictEqual(sniffedEncoding, "UTF-8");
     });
   });
 }
