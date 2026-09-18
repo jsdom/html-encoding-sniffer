@@ -5,6 +5,16 @@ const fs = require("node:fs");
 const path = require("node:path");
 const htmlEncodingSniffer = require("..");
 
+describe("truncated charset parameters", () => {
+  for (const content of ["charset", "charset ", "charset=", "charset= "]) {
+    it(`ignores a content attribute ending with ${JSON.stringify(content)}`, () => {
+      const html = `<meta http-equiv="content-type" content="text/html; ${content}">`;
+      assert.strictEqual(htmlEncodingSniffer(Buffer.from(html)), "windows-1252");
+      assert.strictEqual(htmlEncodingSniffer(Buffer.from(`${html}<meta charset="utf-8">`)), "UTF-8");
+    });
+  }
+});
+
 function read(relative) {
   // Test that the module works with Uint8Arrays, not just Buffers:
   const buffer = fs.readFileSync(path.resolve(__dirname, relative));
