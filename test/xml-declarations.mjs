@@ -518,6 +518,29 @@ for (const xml of [false, true]) {
 }
 
 describe("HTML prescan falling back to an XML declaration", () => {
+  it("does not limit XML declarations to maxPrescanBytes", () => {
+    const input = bytes(`<?xml ${" ".repeat(4096)}encoding="windows-1251"?>`);
+    for (const maxPrescanBytes of [0, 16, Infinity]) {
+      assert.equal(htmlEncodingSniffer(input, { maxPrescanBytes }), "windows-1251");
+    }
+  });
+
+  // Each row: expected encoding and UTF-16 signature.
+  for (const [encoding, signature] of [
+    ["UTF-16LE", [0x3C, 0, 0x3F, 0, 0x78, 0]],
+    ["UTF-16BE", [0, 0x3C, 0, 0x3F, 0, 0x78]]
+  ]) {
+    it(`detects the ${encoding} signature when meta scanning is disabled`, () => {
+      assert.equal(htmlEncodingSniffer(new Uint8Array(signature), { maxPrescanBytes: 0 }), encoding);
+    });
+  }
+
+  it("uses a late meta declaration before an XML declaration when the limit is extended", () => {
+    const input = bytes(`<?xml encoding="windows-1251"?>${" ".repeat(1024)}<meta charset="windows-1253">`);
+    assert.equal(htmlEncodingSniffer(input, { maxPrescanBytes: 1024 }), "windows-1251");
+    assert.equal(htmlEncodingSniffer(input, { maxPrescanBytes: 2048 }), "windows-1253");
+  });
+
   for (const suffix of [
     '<meta charset="unknown">',
     '<meta content="text/html;charset=windows-1253">',
