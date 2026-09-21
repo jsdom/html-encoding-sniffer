@@ -1,13 +1,20 @@
-# Determine the Encoding of a HTML Byte Stream
+# Determine the Encoding of an HTML or XML Byte Stream
 
-This package implements the HTML Standard's [encoding sniffing algorithm](https://html.spec.whatwg.org/multipage/syntax.html#encoding-sniffing-algorithm) in all its glory. The most interesting part of this is how it pre-scans the first 1024 bytes in order to search for certain `<meta charset>`-related patterns.
+This package determines the character encoding of an HTML or XML byte stream. It follows the HTML Standard's [encoding sniffing algorithm](https://html.spec.whatwg.org/multipage/parsing.html#encoding-sniffing-algorithm) for HTML, and WebKit's encoding sniffing behavior for XML.
 
 ```js
 const htmlEncodingSniffer = require("html-encoding-sniffer");
-const fs = require("fs");
+const fs = require("node:fs");
 
-const htmlBytes = fs.readFileSync("./html-page.html");
-const sniffedEncoding = htmlEncodingSniffer(htmlBytes);
+const bytes = fs.readFileSync("./page.html");
+const sniffedEncoding = htmlEncodingSniffer(bytes);
+```
+
+For XML, pass `{ xml: true }`:
+
+```js
+const bytes = fs.readFileSync("./document.xml");
+const sniffedEncoding = htmlEncodingSniffer(bytes, { xml: true });
 ```
 
 The passed bytes are given as a `Uint8Array`; the Node.js `Buffer` subclass of `Uint8Array` will also work, as shown above.
@@ -16,7 +23,7 @@ The returned value will be a canonical [encoding name](https://encoding.spec.wha
 
 ```js
 const { TextDecoder } = require("@exodus/bytes/encoding.js");
-const htmlString = (new TextDecoder(sniffedEncoding)).decode(htmlBytes);
+const decodedString = (new TextDecoder(sniffedEncoding)).decode(bytes);
 ```
 
 ## Options
@@ -24,14 +31,14 @@ const htmlString = (new TextDecoder(sniffedEncoding)).decode(htmlBytes);
 You can pass the following options to `htmlEncodingSniffer`:
 
 ```js
-const sniffedEncoding = htmlEncodingSniffer(htmlBytes, {
+const sniffedEncoding = htmlEncodingSniffer(bytes, {
   xml,
   transportLayerEncodingLabel,
   defaultEncoding,
 });
 ```
 
-The `xml` option is a boolean, defaulting to `false`. If set to `true`, then we bypass the [HTML encoding sniffing algorithm](https://html.spec.whatwg.org/multipage/syntax.html#encoding-sniffing-algorithm) and compute the encoding based on the presence of a BOM, a UTF-16 byte signature, an XML encoding declaration, or the other options provided. HTML `<meta>` declarations are ignored. XML well-formedness validation is left to the caller's XML parser.
+The `xml` option is a boolean, defaulting to `false`. It selects XML sniffing when `true` and HTML sniffing when `false`. XML sniffing ignores HTML `<meta>` declarations and leaves well-formedness validation to the caller's XML parser.
 
 The `transportLayerEncodingLabel` is an encoding label that is obtained from the "transport layer" (probably a HTTP `Content-Type` header), which overrides everything but a BOM.
 

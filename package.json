@@ -1,9 +1,10 @@
 {
   "name": "html-encoding-sniffer",
-  "description": "Sniff the encoding from a HTML byte stream",
+  "description": "Sniff the encoding of an HTML or XML byte stream",
   "keywords": [
     "encoding",
-    "html"
+    "html",
+    "xml"
   ],
   "version": "6.0.0",
   "author": "Domenic Denicola <d@domenic.me> (https://domenic.me/)",
