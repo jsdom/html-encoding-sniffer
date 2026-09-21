@@ -141,3 +141,69 @@ describe("HTML meta declarations", () => {
     });
   }
 });
+
+describe("HTML meta declaration boundaries", () => {
+  // Each row: test name, input, expected encoding, and expected encoding with `defaultEncoding: "ISO-8859-16"`.
+  for (const [name, source, expected, expectedWithDefault] of [
+    [
+      "charset without a closing > at EOF",
+      '<meta charset="windows-1253"',
+      "windows-1252",
+      "ISO-8859-16"
+    ],
+    [
+      "charset followed by an unfinished attribute at EOF",
+      '<meta charset="windows-1253" unfinished="',
+      "windows-1252",
+      "ISO-8859-16"
+    ],
+    [
+      "http-equiv without a closing > at EOF",
+      '<meta http-equiv="content-type" content="text/html;charset=windows-1253"',
+      "windows-1252",
+      "ISO-8859-16"
+    ],
+    [
+      "content before http-equiv without a closing > at EOF",
+      '<meta content="text/html;charset=windows-1253" http-equiv="content-type"',
+      "windows-1252",
+      "ISO-8859-16"
+    ],
+    [
+      "charset with a closing > at byte offset 1023",
+      `${'<meta charset="windows-1253"'.padEnd(1023)}>`,
+      "windows-1253",
+      "windows-1253"
+    ],
+    [
+      "charset with a closing > at byte offset 1024",
+      `${'<meta charset="windows-1253"'.padEnd(1024)}>`,
+      "windows-1252",
+      "ISO-8859-16"
+    ],
+    [
+      "http-equiv with a closing > at byte offset 1023",
+      `${'<meta http-equiv="content-type" content="text/html;charset=windows-1253"'.padEnd(1023)}>`,
+      "windows-1253",
+      "windows-1253"
+    ],
+    [
+      "http-equiv with a closing > at byte offset 1024",
+      `${'<meta http-equiv="content-type" content="text/html;charset=windows-1253"'.padEnd(1024)}>`,
+      "windows-1252",
+      "ISO-8859-16"
+    ],
+    [
+      "charset followed by an attribute extending beyond the prescan limit",
+      `<meta charset="windows-1253" unfinished="${"x".repeat(1024)}">`,
+      "windows-1252",
+      "ISO-8859-16"
+    ]
+  ]) {
+    it(name, () => {
+      const input = Uint8Array.from(source, c => c.charCodeAt(0));
+      assert.equal(htmlEncodingSniffer(input), expected);
+      assert.equal(htmlEncodingSniffer(input, { defaultEncoding: "ISO-8859-16" }), expectedWithDefault);
+    });
+  }
+});
