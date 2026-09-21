@@ -1,5 +1,6 @@
 import domenicConfig from "@domenic/eslint-config";
 import globals from "globals";
+import stylisticConfig from "@domenic/eslint-config/stylistic";
 
 export default [
   {
@@ -9,5 +10,6 @@ export default [
       globals: globals.node
     }
   },
-  ...domenicConfig
+  ...domenicConfig,
+  ...stylisticConfig
 ];
