@@ -15,7 +15,7 @@ The passed bytes are given as a `Uint8Array`; the Node.js `Buffer` subclass of `
 The returned value will be a canonical [encoding name](https://encoding.spec.whatwg.org/#names-and-labels) (not a label). You might then combine this with the [`@exodus/bytes`](https://github.com/ExodusOSS/bytes/) package to decode the result:
 
 ```js
-const { TextDecoder } = require("@exodus/bytes");
+const { TextDecoder } = require("@exodus/bytes/encoding.js");
 const htmlString = (new TextDecoder(sniffedEncoding)).decode(htmlBytes);
 ```
 
@@ -31,7 +31,7 @@ const sniffedEncoding = htmlEncodingSniffer(htmlBytes, {
 });
 ```
 
-The `xml` option is a boolean, defaulting to `false`. If set to `true`, then we bypass the [HTML encoding sniffing algorithm](https://html.spec.whatwg.org/multipage/syntax.html#encoding-sniffing-algorithm) and compute the encoding based on the presence of a BOM, or the other options provided. (In the future, we may perform sniffing of the `<?xml?>` declaration, but for now that is not implemented.)
+The `xml` option is a boolean, defaulting to `false`. If set to `true`, then we bypass the [HTML encoding sniffing algorithm](https://html.spec.whatwg.org/multipage/syntax.html#encoding-sniffing-algorithm) and compute the encoding based on the presence of a BOM, a UTF-16 byte signature, an XML encoding declaration, or the other options provided. HTML `<meta>` declarations are ignored. XML well-formedness validation is left to the caller's XML parser.
 
 The `transportLayerEncodingLabel` is an encoding label that is obtained from the "transport layer" (probably a HTTP `Content-Type` header), which overrides everything but a BOM.
 
