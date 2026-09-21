@@ -35,6 +35,7 @@ const sniffedEncoding = htmlEncodingSniffer(bytes, {
   xml,
   transportLayerEncodingLabel,
   defaultEncoding,
+  maxPrescanBytes
 });
 ```
 
@@ -43,6 +44,8 @@ The `xml` option is a boolean, defaulting to `false`. It selects XML sniffing wh
 The `transportLayerEncodingLabel` is an encoding label that is obtained from the "transport layer" (probably a HTTP `Content-Type` header), which overrides everything but a BOM.
 
 The `defaultEncoding` is the ultimate fallback encoding used if no valid encoding is supplied by the transport layer, and no encoding is sniffed from the bytes. For HTML, it defaults to `"windows-1252"`, as recommended by the algorithm's table of suggested defaults for "All other locales" (including the `en` locale). For XML, it defaults to `"UTF-8"`.
+
+The `maxPrescanBytes` option sets how many bytes to scan for HTML `<meta>` encoding declarations, defaulting to `1024`. Set a larger value to recognize declarations later in the input, `Infinity` to scan the entire input, or `0` to skip meta scanning. It must be a non-negative integer or `Infinity`. This limit does not apply to XML declarations or UTF-16 byte signatures. Supplying it when `xml` is `true` throws a `TypeError`.
 
 ## Credits
 

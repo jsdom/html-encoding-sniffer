@@ -31,6 +31,15 @@ for (const xml of [false, true]) {
   });
 }
 
+describe("HTML BOM detection with meta scanning disabled", () => {
+  for (const [encoding, bom, content] of cases) {
+    it(`detects ${encoding}`, () => {
+      const input = new Uint8Array([...bom, ...content]);
+      assert.equal(htmlEncodingSniffer(input, { maxPrescanBytes: 0 }), encoding);
+    });
+  }
+});
+
 describe("UTF-32 BOMs in XML", () => {
   it("ignores a UTF-32BE BOM and defaults to UTF-8", () => {
     const input = new Uint8Array([0x00, 0x00, 0xFE, 0xFF, 0x3C, 0x3F, 0x78, 0x6D, 0x6C]);

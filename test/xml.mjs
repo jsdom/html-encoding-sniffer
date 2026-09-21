@@ -41,3 +41,30 @@ describe("XML default encoding", () => {
     }), "ISO-8859-1");
   });
 });
+
+describe("XML rejects maxPrescanBytes", () => {
+  const input = Uint8Array.from('<?xml encoding="windows-1251"?>', c => c.charCodeAt(0));
+
+  for (const maxPrescanBytes of [0, 1024, Infinity, -1, NaN, null, "1024"]) {
+    it(`throws a TypeError for maxPrescanBytes: ${maxPrescanBytes}`, () => {
+      assert.throws(() => htmlEncodingSniffer(input, { xml: true, maxPrescanBytes }), TypeError);
+    });
+  }
+
+  it("treats undefined as an omitted option", () => {
+    assert.equal(htmlEncodingSniffer(input, { xml: true, maxPrescanBytes: undefined }), "windows-1251");
+  });
+
+  it("throws even when a BOM supplies the encoding", () => {
+    const bomInput = new Uint8Array([0xEF, 0xBB, 0xBF, ...input]);
+    assert.throws(() => htmlEncodingSniffer(bomInput, { xml: true, maxPrescanBytes: 1024 }), TypeError);
+  });
+
+  it("throws even when the transport layer supplies the encoding", () => {
+    assert.throws(() => htmlEncodingSniffer(input, {
+      xml: true,
+      maxPrescanBytes: 1024,
+      transportLayerEncodingLabel: "UTF-8"
+    }), TypeError);
+  });
+});
