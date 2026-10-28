@@ -23,7 +23,7 @@ The returned value will be a canonical [encoding name](https://encoding.spec.wha
 
 ```js
 const { TextDecoder } = require("@exodus/bytes/encoding.js");
-const decodedString = (new TextDecoder(sniffedEncoding)).decode(bytes);
+const decodedString = new TextDecoder(sniffedEncoding).decode(bytes);
 ```
 
 ## Options
@@ -35,7 +35,7 @@ const sniffedEncoding = htmlEncodingSniffer(bytes, {
   xml,
   transportLayerEncodingLabel,
   defaultEncoding,
-  maxPrescanBytes
+  maxPrescanBytes,
 });
 ```
 
