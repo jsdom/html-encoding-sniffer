@@ -16,20 +16,21 @@
   "files": [
     "lib/"
   ],
+  "type": "commonjs",
   "main": "lib/html-encoding-sniffer.js",
   "scripts": {
-    "test": "node --test",
     "check": "npm run lint && npm run fmt:check",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "fmt": "oxfmt",
-    "fmt:check": "oxfmt --check"
+    "fmt:check": "oxfmt --check",
+    "test": "node --test"
   },
   "dependencies": {
-    "@exodus/bytes": "^1.15.1"
+    "@exodus/bytes": "^1.16.0"
   },
   "devDependencies": {
-    "@domenic/eslint-config": "^6.0.0",
+    "@domenic/eslint-config": "^6.1.0",
     "@stylistic/eslint-plugin": "^5.10.0",
     "eslint": "^10.13.0",
     "globals": "^17.13.0",
